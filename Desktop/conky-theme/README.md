@@ -1,6 +1,8 @@
+<h2>A simple and funcional conky theme for numantinos</h2>
 
-<h2>A simple and funcional conky theme for **numantin**os</h2>
----
+<img src="https://raw.githubusercontent.com/pablomario/numantinos-project/master/Desktop/conky-theme/main-conky.png" 
+alt="numantinos conky theme banner" align="center" />
+<br />
 
 ...with love for numantinos-project 
 
