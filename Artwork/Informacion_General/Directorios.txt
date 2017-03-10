@@ -1,0 +1,2 @@
+Directorio Base para wallpapers:
+/usr/share/backgrounds
