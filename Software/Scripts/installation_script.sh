@@ -18,7 +18,10 @@ cd
     # Add new software - softwareRepository=("software1", "software2", "software3")
     # 
     declare -a softwareRepository=(
-        "https://github.com/pablomario/numantinos-project/blob/master/Software/Others/icecat-52.1.0.en-US.linux-x86_64.tar.bz2"
+        "http://ftp.gnu.org/gnu/gnuzilla/52.1.0/icecat-52.1.0.en-US.linux-x86_64.tar.bz2"
+        "http://ftp.gnu.org/gnu/gnuzilla/52.1.0/langpacks/icecat-52.1.0.es-ES.langpack.xpi"
+        "http://ftp.gnu.org/gnu/gnuzilla/52.1.0/langpacks/icecat-52.1.0.es-ES.langpack.xpi.sig"
+        "http://downloads.activestate.com/Komodo/releases/10.2.3/Komodo-Edit-10.2.3-17708-linux-x86_64.tar.gz"
         )
     
     # COLORS

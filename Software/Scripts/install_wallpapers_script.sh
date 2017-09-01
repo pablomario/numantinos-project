@@ -60,8 +60,13 @@
         if [ -d $USER_BACKGROUNDS_DIRECTORY ];
         then
             cd $USER_BACKGROUNDS_DIRECTORY
-            mkdir _old
-            mv *  _old
+            if [ ! -d $USER_BACKGROUNDS_DIRECTORY ];
+            then
+                mkdir _old
+                mv *  _old
+            else
+                mv *.* _old
+            fi
         fi       
     }
     
@@ -85,13 +90,14 @@
         #Debug
         #xfconf-query --channel xfce4-desktop --list
         
-        # Create property
-        #xfconf-query -c xfce4-desktop -p /backdrop/single-workspace-mode --create --type 'bool' --set 'false'
+        # Crear propiedad "single-workspace-mode" permite establecer diferentes wallpapers para cada
+        # workspace definido, esta linea puede ejecutarse de forma manual
+        xfconf-query -c xfce4-desktop -p /backdrop/single-workspace-mode --create --type 'bool' --set 'false'
 
-        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorDFP2/workspace0/last-image --set /usr/share/backgrounds/numantinos.jpg 
-        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorDFP2/workspace1/last-image --set /usr/share/backgrounds/numantinos_base_filter_wallpaper.png
-        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorDFP2/workspace3/last-image --set /usr/share/backgrounds/numantinos_developer.jpg
-        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorDFP2/workspace2/last-image --set /usr/share/backgrounds/numantinos_ninja.jpg    
+        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image --set /usr/share/backgrounds/numantinos.jpg 
+        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace1/last-image --set /usr/share/backgrounds/numantinos_base_filter_wallpaper.png
+        #xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace3/last-image --set /usr/share/backgrounds/numantinos_developer.jpg
+        #xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace2/last-image --set /usr/share/backgrounds/numantinos_ninja.jpg    
     }
     
     
@@ -102,7 +108,7 @@
         makeEnvironment
         
         # 2- Download resources
-       downloadResources
+        downloadResources
         
         # 3- Installing pacakges
         updateEnviroment
