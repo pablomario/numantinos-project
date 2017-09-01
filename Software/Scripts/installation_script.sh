@@ -85,6 +85,10 @@ cd
         done
     }
     
+    openDirectory() {
+        thunar $USER_INSTALLATION_DIRECTORY
+    }
+    
     
     ### Initialization script 
     init () {
@@ -96,8 +100,13 @@ cd
         downloadSoftware
         
         # 3- Installing pacakges
+        # TODO
         #installingSoftware;
         
+        # 4- Abre en ventana la crpeta "/tmp" de descarga
+        openDirectory
+     
+        showInfoMessage "Have a nice day!"   
     }
     # Execute process
     init
