@@ -1,28 +1,26 @@
 #!/bin/sh
 # title			: installation_Script
-# description	: This script download and install numantinos wallpaper pack
+# description	: This script help and simplify installation 
 # author		: https://github.com/pablomario
 # date			: 28/08/2017
 # version		: 0.1
-# usage			: sudo ./install_wallpapers_script.sh
+# usage			: sudo ./installationScript.sh
 #
 # Execute this script with root privileges
-
+cd
     
     # DEFINITIONS UTILS
     
     # DIRECTORYs
-    USER_BACKGROUNDS_DIRECTORY="/usr/share/backgrounds"
-
+    USER_INSTALLATION_DIRECTORY=$(pwd $1)/tmp
+    DEFAULT_THEMES_DIRECTORY="/usr/share/plymouth/themes/"
     
     # SOFTWARE REPOSITORY
-    # Plymouth theme
+    # A plymouth theme
     # 
-    declare -a urlResourcesRepository=(
-        "https://raw.githubusercontent.com/pablomario/numantinos-project/master/Artwork/wallpapers/numantinos.jpg"
-        "https://raw.githubusercontent.com/pablomario/numantinos-project/master/Artwork/wallpapers/numantinos_base_filter_wallpaper.png"
-        "https://raw.githubusercontent.com/pablomario/numantinos-project/master/Artwork/wallpapers/numantinos_developer.jpg"
-        "https://raw.githubusercontent.com/pablomario/numantinos-project/master/Artwork/wallpapers/numantinos_ninja.jpg"
+    declare -a softwareRepository=(
+        "https://github.com/pablomario/numantinos-project/blob/master/Artwork/plymouth/plymouthd.conf"
+        "https://github.com/pablomario/numantinos-project/tree/master/Artwork/plymouth/numantinos-elegant"
         )
     
     # COLORS
@@ -55,29 +53,30 @@
     # Support method
     # Preparing pre-installation environment
     makeEnvironment () {
-        echo "Preparing pre-installation environment..."         
-        
-        if [ -d $USER_BACKGROUNDS_DIRECTORY ];
+        echo "Preparing pre-installation environment..."
+        cd        
+        echo "$RUTA"
+        if [ ! -d $USER_INSTALLATION_DIRECTORY ];
         then
-            cd $USER_BACKGROUNDS_DIRECTORY
-            if [ ! -d $USER_BACKGROUNDS_DIRECTORY ];
-            then
-                mkdir _old
-                mv *  _old
-            else
-                mv *.* _old
-            fi
-        fi       
+            mkdir $USER_INSTALLATION_DIRECTORY
+        fi
+        cd $USER_INSTALLATION_DIRECTORY
+        ACTUAL_DIRECTORY=$(pwd $1)
+        if [[ $USER_INSTALLATION_DIRECTORY == *$ACTUAL_DIRECTORY*  ]];
+        then
+            showOKMessage "The '$ACTUAL_DIRECTORY' Directory was created successfully"
+        else
+            showKOMessage "An unexpected problem occured - function 'makeEnvironment' "
+        fi
     }
     
     
     # Support method
     # Download Required Software from repository
-    downloadResources () {
-        echo "Downloading resources..."
-        cd $USER_BACKGROUNDS_DIRECTORY
-        pwd
-        for i in "${urlResourcesRepository[@]}"
+    downloadSoftware () {
+        echo "Download Required Software..."
+        cd $USER_INSTALLATION_DIRECTORY
+        for i in "${softwareRepository[@]}"
         do
            showInfoMessage "Downloading $i"
            wget -q "$i"
@@ -85,19 +84,14 @@
         done
     }
     
-    updateEnviroment() {
-        echo "Updating Desktop and Workspaces..."
-        #Debug
-        #xfconf-query --channel xfce4-desktop --list
-        
-        # Crear propiedad "single-workspace-mode" permite establecer diferentes wallpapers para cada
-        # workspace definido, esta linea puede ejecutarse de forma manual
-        xfconf-query -c xfce4-desktop -p /backdrop/single-workspace-mode --create --type 'bool' --set 'false'
-
-        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image --set /usr/share/backgrounds/numantinos.jpg 
-        xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace1/last-image --set /usr/share/backgrounds/numantinos_base_filter_wallpaper.png
-        #xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace3/last-image --set /usr/share/backgrounds/numantinos_developer.jpg
-        #xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace2/last-image --set /usr/share/backgrounds/numantinos_ninja.jpg    
+    installTheme() {
+        echo "Installing numantinos-elegant theme..."
+        sudo cp -a -r $USER_INSTALLATION_DIRECTORY/numantinos-elegant $DEFAULT_THEMES_DIRECTORY
+        sudo cp $USER_INSTALLATION_DIRECTORY/plymouthd.conf /etc/plymouth/plymouthd.conf
+        showInfoMessage "Installing theme, re-compile kernel"
+        showKOMessage "do not panic!!!, please"
+        sudo plymouth-set-default-theme -R numantinos-elegant
+        reboot
     }
     
     
@@ -107,12 +101,14 @@
         # 1- Preparing pre-installation environment
         makeEnvironment
         
-        # 2- Download resources
-        downloadResources
+        # 2- Download packages
+        downloadSoftware
         
-        # 3- Installing pacakges
-        updateEnviroment
+        # 3- Installing plymouth theme
+        installTheme;
         
+     
+        showInfoMessage "Have a nice day!"   
     }
     # Execute process
     init
