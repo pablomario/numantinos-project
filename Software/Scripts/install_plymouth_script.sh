@@ -20,7 +20,7 @@ cd
     # 
     declare -a softwareRepository=(
         "https://github.com/pablomario/numantinos-project/blob/master/Artwork/plymouth/plymouthd.conf"
-        "https://github.com/pablomario/numantinos-project/tree/master/Artwork/plymouth/numantinos-elegant"
+        "https://github.com/pablomario/numantinos-project/raw/master/Artwork/plymouth/numantinos-elegant.tar.gz"
         )
     
     # COLORS
@@ -53,9 +53,8 @@ cd
     # Support method
     # Preparing pre-installation environment
     makeEnvironment () {
-        echo "Preparing pre-installation environment..."
+        showInfoMessage "Preparing pre-installation environment..."
         cd        
-        echo "$RUTA"
         if [ ! -d $USER_INSTALLATION_DIRECTORY ];
         then
             mkdir $USER_INSTALLATION_DIRECTORY
@@ -74,7 +73,7 @@ cd
     # Support method
     # Download Required Software from repository
     downloadSoftware () {
-        echo "Download Required Software..."
+        showInfoMessage "Download Required Software..."
         cd $USER_INSTALLATION_DIRECTORY
         for i in "${softwareRepository[@]}"
         do
@@ -85,12 +84,30 @@ cd
     }
     
     installTheme() {
-        echo "Installing numantinos-elegant theme..."
-        sudo cp -a -r $USER_INSTALLATION_DIRECTORY/numantinos-elegant $DEFAULT_THEMES_DIRECTORY
+        showInfoMessage "Installing numantinos-elegant theme..."
+        
+        # Descomprimir el paquete con el theme y copiarlo en la ruta correspondiente
+        tar -xzf $USER_INSTALLATION_DIRECTORY/numantinos-elegant.tar.gz
+        
+        if [ ! -d $USER_INSTALLATION_DIRECTORY ];
+        then    
+            sudo cp -rf $USER_INSTALLATION_DIRECTORY/numantinos-elegant $DEFAULT_THEMES_DIRECTORY
+        else
+            sudo rm -r $DEFAULT_THEMES_DIRECTORY/numantinos-elegant
+            sudo cp -rf $USER_INSTALLATION_DIRECTORY/numantinos-elegant $DEFAULT_THEMES_DIRECTORY
+        fi    
+        showOKMessage "Successfully created theme directory"
+        
+        # Copiar el fichero configuracion
         sudo cp $USER_INSTALLATION_DIRECTORY/plymouthd.conf /etc/plymouth/plymouthd.conf
-        showInfoMessage "Installing theme, re-compile kernel"
-        showKOMessage "do not panic!!!, please"
+        showOKMessage "Correctly updated configuration"
+        
+        showInfoMessage "============================================"
+        showInfoMessage "=     The kernel image must be rebuilt     ="
+        showInfoMessage "============================================"
         sudo plymouth-set-default-theme -R numantinos-elegant
+        
+        showKOMessage "Do not panic! please."
         reboot
     }
     
@@ -105,10 +122,7 @@ cd
         downloadSoftware
         
         # 3- Installing plymouth theme
-        installTheme;
-        
-     
-        showInfoMessage "Have a nice day!"   
+        installTheme; 
     }
     # Execute process
     init
