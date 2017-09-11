@@ -16,7 +16,7 @@
 
     
     # SOFTWARE REPOSITORY
-    # Add new software - softwareRepository=("software1", "software2", "software3")
+    # Plymouth theme
     # 
     declare -a urlResourcesRepository=(
         "https://raw.githubusercontent.com/pablomario/numantinos-project/master/Artwork/wallpapers/numantinos.jpg"
