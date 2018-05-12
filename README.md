@@ -1,4 +1,5 @@
-
+<img src="https://github.com/pablomario/numantinos-project/blob/master/Docs/Resources/numantinos.png" 
+alt="Manjaro simple theme banner" align="center" />
 # numantinos-project
 In the very distant future will be a nice and simple GNU/Linux operating system based on Arch/Manjaro. For now it is just a personal project with which to learn.
 
